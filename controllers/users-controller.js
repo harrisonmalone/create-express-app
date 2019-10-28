@@ -2,7 +2,7 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 
 // models
-const User = require('./models/User');
+const User = require('../models/User');
 
 const register = async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, 10) 
@@ -42,7 +42,7 @@ const confirmLogin = (req, res) => {
 
 const logout = (req, res) => {
   req.logOut()
-  res.redirect('/login')
+  res.send('logged out')
 }
 
 module.exports = {
