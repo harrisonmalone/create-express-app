@@ -7,4 +7,4 @@ const hasAuth = (req, res, next) => {
   }
 }
 
-module.exports = hasAuth;
+module.exports = hasAuth

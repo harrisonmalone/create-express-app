@@ -1,14 +1,16 @@
-const passport = require('passport');
-const bcrypt = require('bcrypt');
+const passport = require('passport')
+const bcrypt = require('bcrypt')
 
 // models
-const User = require('../models/User');
+const User = require('../models/User')
 
 const register = async (req, res) => {
-  const hash = await bcrypt.hash(req.body.password, 10) 
-  req.body.password = hash
-  let user = new User(req.body)
-  await user.save() 
+  const hash = await bcrypt.hash(req.body.password, 10)
+  let user = new User({
+    username: req.body.username,
+    password: hash,
+  })
+  await user.save()
   req.login(user, (err) => {
     if (err) {
       return res.status(404).send('error')
@@ -19,15 +21,19 @@ const register = async (req, res) => {
 }
 
 const login = (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {  
-    if (err) { return next(); }
+  passport.authenticate('local', (err, user) => {
+    if (err) {
+      return next()
+    }
     if (!user) {
       next()
     }
     req.login(user, function(err) {
-      if (err) { return next(); }
+      if (err) {
+        return next()
+      }
       next()
-    });
+    })
   })(req, res, next)
 }
 
@@ -49,5 +55,5 @@ module.exports = {
   register,
   login,
   confirmLogin,
-  logout
+  logout,
 }
